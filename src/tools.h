@@ -4,6 +4,9 @@
 #include <vector>
 #include "Eigen/Dense"
 
+typedef Eigen::Matrix<double, 3, 4> RadarJacobian;
+typedef Eigen::Matrix<double, 2, 4> LaserJacobian;
+
 class Tools {
  public:
   /**
@@ -19,14 +22,14 @@ class Tools {
   /**
    * A helper method to calculate RMSE.
    */
-  Eigen::VectorXd CalculateRMSE(const std::vector<Eigen::VectorXd> &estimations, 
-                                const std::vector<Eigen::VectorXd> &ground_truth);
+  Eigen::Vector4d CalculateRMSE(
+      const std::vector<Eigen::Vector4d> &estimations,
+      const std::vector<Eigen::Vector4d> &ground_truth);
 
   /**
    * A helper method to calculate Jacobians.
    */
-  Eigen::MatrixXd CalculateJacobian(const Eigen::VectorXd& x_state);
-
+  RadarJacobian CalculateJacobian(const Eigen::Vector4d &x_state);
 };
 
 #endif  // TOOLS_H_
