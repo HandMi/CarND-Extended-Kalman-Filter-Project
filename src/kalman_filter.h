@@ -1,12 +1,14 @@
 #ifndef KALMAN_FILTER_H_
 #define KALMAN_FILTER_H_
 
+#include "measurement_package.h"
 #include "tools.h"
 
 class KalmanFilter {
  private:
   // tool object used to compute Jacobian and RMSE
-  const Tools tools;
+  const double noise_ax;
+  const double noise_ay;
 
   // state transition matrix
   Eigen::Matrix4d F_;
@@ -21,6 +23,8 @@ class KalmanFilter {
   // measurement covariance matrices
   Eigen::Matrix2d R_laser_;
   Eigen::Matrix3d R_radar_;
+
+  Tools tools;
 
  public:
   /**
@@ -63,13 +67,13 @@ class KalmanFilter {
    * Updates the state by using standard Kalman Filter equations
    * @param z The measurement at k+1
    */
-  void Update(const Eigen::Vector4d &z);
+  void Update(const LaserMeasurement m);
 
   /**
    * Updates the state by using Extended Kalman Filter equations
    * @param z The measurement at k+1
    */
-  void UpdateEKF(const Eigen::Vector4d &z);
+  void Update(const RadarMeasurement m);
 
   // state vector
   Eigen::Vector4d x_;

@@ -5,29 +5,30 @@
 
 class MeasurementPackage {
  public:
-  enum SensorType { LASER, RADAR };
-  MeasurementPackage(SensorType sensor_type, long long timestamp,
-                     Eigen::Vector4d data)
-      : sensor_type_(sensor_type), timestamp_(timestamp), cart_(data){};
-
-  const SensorType sensor_type_;
+  MeasurementPackage(long long timestamp, Eigen::Vector4d data)
+      : timestamp_(timestamp), cart_(data){};
   const long long timestamp_;
   const Eigen::Vector4d cart_;
 };
 
 class LaserMeasurement : public MeasurementPackage {
  public:
-  LaserMeasurement(long long timestamp, float px, float py)
-      : MeasurementPackage(LASER, timestamp, Eigen::Vector4d(px, py, 0, 0)){};
+  LaserMeasurement(long long timestamp, double px, double py)
+      : MeasurementPackage(timestamp, Eigen::Vector4d(px, py, 0, 0)),
+        raw_data_(px, py){};
+  const Eigen::Vector2d raw_data_;
 };
 
 class RadarMeasurement : public MeasurementPackage {
  public:
-  RadarMeasurement(long long timestamp, float rho, float theta, float rho_dot)
+  RadarMeasurement(long long timestamp, double rho, double theta,
+                   double rho_dot)
       : MeasurementPackage(
-            RADAR, timestamp,
+            timestamp,
             Eigen::Vector4d(rho * cos(theta), rho * sin(theta),
-                            rho_dot * cos(theta), rho_dot * sin(theta))){};
+                            rho_dot * cos(theta), rho_dot * sin(theta))),
+        raw_data_(rho, theta, rho_dot){};
+  const Eigen::Vector3d raw_data_;
 };
 
 #endif  // MEASUREMENT_PACKAGE_H_

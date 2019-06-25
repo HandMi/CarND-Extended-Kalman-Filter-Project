@@ -70,6 +70,7 @@ int main() {
             float py;
             iss >> px;
             iss >> py;
+            iss >> timestamp;
             LaserMeasurement meas_package(timestamp, px, py);
             // Call ProcessMeasurement(meas_package) for Kalman filter
             fusionEKF.ProcessMeasurement(meas_package);
@@ -80,6 +81,7 @@ int main() {
             iss >> rho;
             iss >> theta;
             iss >> rho_dot;
+            iss >> timestamp;
             RadarMeasurement meas_package(timestamp, rho, theta, rho_dot);
             // Call ProcessMeasurement(meas_package) for Kalman filter
             fusionEKF.ProcessMeasurement(meas_package);

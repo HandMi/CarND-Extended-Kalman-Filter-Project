@@ -17,6 +17,7 @@ Vector4d Tools::CalculateRMSE(const vector<Vector4d> &estimations,
     for (uint i = 0; i < estimations.size(); i++) {
       rmse += pow(estimations[i].array() - ground_truth[i].array(), 2);
     }
+    rmse /= estimations.size();
     return rmse.sqrt().matrix();
   } else {
     std::cout << "Error: Vector size mismatch in RMSE calculation."
@@ -34,7 +35,7 @@ RadarJacobian Tools::CalculateJacobian(const Vector4d &x_state) {
   double vx = x_state(2);
   double vy = x_state(3);
   if (p_square > 0.0) {
-    Hj << px / p_abs, py / p_abs, 0, 0, -py / p_abs, px / p_abs, 0, 0,
+    Hj << px / p_abs, py / p_abs, 0, 0, -py / p_square, px / p_square, 0, 0,
         py * (vx * py - vy * px) / (p_square * p_abs),
         px * (vy * px - vx * py) / (p_square * p_abs), px / p_abs, py / p_abs;
   } else {
