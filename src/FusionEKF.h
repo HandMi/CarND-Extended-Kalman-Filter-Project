@@ -13,12 +13,18 @@
 class FusionEKF {
  public:
   /**
+   * Constructor
+   */
+  FusionEKF() = default;
+
+  /**
    * Destructor.
    */
   virtual ~FusionEKF() = default;
 
   /**
    * Run the whole flow of the Kalman Filter from here.
+   * @param measurement_pack either Laser or Radar measurement package
    */
   template <typename MeasurementPackageType>
   void ProcessMeasurement(const MeasurementPackageType &measurement_pack);
@@ -75,7 +81,7 @@ void FusionEKF::ProcessMeasurement(
 
   ekf_.Update(measurement_pack);
 
-  // print the outputstd::
+  // print the output
   std::cout << "x_ = " << std::endl << ekf_.x_ << std::endl;
   std::cout << "P_ = " << std::endl << ekf_.P_ << std::endl;
 }

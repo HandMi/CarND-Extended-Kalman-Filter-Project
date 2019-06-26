@@ -11,6 +11,7 @@ class MeasurementPackage {
   const Eigen::Vector4d cart_;
 };
 
+// Laser Measurement is constructed from cartesian coordinates, no velocity data
 class LaserMeasurement : public MeasurementPackage {
  public:
   LaserMeasurement(long long timestamp, double px, double py)
@@ -19,6 +20,7 @@ class LaserMeasurement : public MeasurementPackage {
   const Eigen::Vector2d raw_data_;
 };
 
+// Radar Measurement is constructed from polar coordinates
 class RadarMeasurement : public MeasurementPackage {
  public:
   RadarMeasurement(long long timestamp, double rho, double theta,

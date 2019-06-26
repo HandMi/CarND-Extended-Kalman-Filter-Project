@@ -6,7 +6,7 @@
 
 class KalmanFilter {
  private:
-  // tool object used to compute Jacobian and RMSE
+  // measurement noise
   const double noise_ax;
   const double noise_ay;
 
@@ -24,6 +24,7 @@ class KalmanFilter {
   Eigen::Matrix2d R_laser_;
   Eigen::Matrix3d R_radar_;
 
+  // tool object used to compute Jacobian and RMSE
   Tools tools;
 
  public:
@@ -35,16 +36,12 @@ class KalmanFilter {
   /**
    * Destructor
    */
-  virtual ~KalmanFilter();
+  virtual ~KalmanFilter() = default;
 
   /**
    * Init Initializes Kalman filter
    * @param x_in Initial state
    * @param P_in Initial state covariance
-   * @param F_in Transition matrix
-   * @param H_in Measurement matrix
-   * @param R_in Measurement covariance matrix
-   * @param Q_in Process covariance matrix
    */
   void Init(const Eigen::Vector4d &x_in, const Eigen::Matrix4d &P_in);
 
@@ -65,13 +62,13 @@ class KalmanFilter {
 
   /**
    * Updates the state by using standard Kalman Filter equations
-   * @param z The measurement at k+1
+   * @param z The laser measurement at k+1
    */
   void Update(const LaserMeasurement m);
 
   /**
    * Updates the state by using Extended Kalman Filter equations
-   * @param z The measurement at k+1
+   * @param z The radar measurement at k+1
    */
   void Update(const RadarMeasurement m);
 

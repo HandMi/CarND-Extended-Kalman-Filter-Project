@@ -12,12 +12,12 @@ class Tools {
   /**
    * Constructor.
    */
-  Tools();
+  Tools() = default;
 
   /**
    * Destructor.
    */
-  virtual ~Tools();
+  virtual ~Tools() = default;
 
   /**
    * A helper method to calculate RMSE.

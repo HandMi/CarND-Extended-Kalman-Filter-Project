@@ -29,8 +29,6 @@ KalmanFilter::KalmanFilter() : noise_ax(9.0), noise_ay(9.0) {
   Q_ = Matrix4d::Identity();
 }
 
-KalmanFilter::~KalmanFilter() {}
-
 void KalmanFilter::Init(const Vector4d &x_in, const Matrix4d &P_in) {
   x_ = x_in;
   P_ = P_in;
@@ -75,14 +73,17 @@ void KalmanFilter::Update(const RadarMeasurement m) {
 
   Vector3d h;
   h(0) = sqrt(x_(0) * x_(0) + x_(1) * x_(1));
+  // Renormalize if too close to the origin
   if (0.000001 > x_(0) * x_(0)) {
     x_(0) += 0.002;
   }
   h(1) = atan2(x_(1), x_(0));
   h(2) = (x_(0) * x_(2) + x_(1) * x_(3)) / h(0);
   Vector3d y = m.raw_data_ - h;
+  // y(1) between -Pi and Pi
   y(1) = fmod(y(1), 2 * M_PI);
   (y(1) < M_PI ? true : y(1) = y(1) - 2 * M_PI);
+
   Matrix3d S = H_radar_ * P_ * H_radar_.transpose() + R_radar_;
   Eigen::Matrix<double, 4, 3> K = P_ * H_radar_.transpose() * S.inverse();
   x_ = x_ + K * y;

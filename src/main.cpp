@@ -83,7 +83,7 @@ int main() {
             iss >> rho_dot;
             iss >> timestamp;
             RadarMeasurement meas_package(timestamp, rho, theta, rho_dot);
-            // Call ProcessMeasurement(meas_package) for Kalman filter
+            // Call ProcessMeasurement(meas_package) for Extended Kalman filter
             fusionEKF.ProcessMeasurement(meas_package);
           }
 
@@ -114,7 +114,6 @@ int main() {
           msgJson["rmse_vx"] = RMSE(2);
           msgJson["rmse_vy"] = RMSE(3);
           auto msg = "42[\"estimate_marker\"," + msgJson.dump() + "]";
-          // std::cout << msg << std::endl;
           ws.send(msg.data(), msg.length(), uWS::OpCode::TEXT);
 
         }  // end "telemetry" if

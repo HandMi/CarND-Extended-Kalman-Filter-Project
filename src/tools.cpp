@@ -6,10 +6,6 @@ using Eigen::Matrix4d;
 using Eigen::Vector4d;
 using std::vector;
 
-Tools::Tools() {}
-
-Tools::~Tools() {}
-
 Vector4d Tools::CalculateRMSE(const vector<Vector4d> &estimations,
                               const vector<Vector4d> &ground_truth) {
   Array4d rmse(0, 0, 0, 0);
@@ -34,12 +30,13 @@ RadarJacobian Tools::CalculateJacobian(const Vector4d &x_state) {
   double p_abs = sqrt(p_square);
   double vx = x_state(2);
   double vy = x_state(3);
+  // Jacobian is undefined at the origin
   if (p_square > 0.0) {
     Hj << px / p_abs, py / p_abs, 0, 0, -py / p_square, px / p_square, 0, 0,
         py * (vx * py - vy * px) / (p_square * p_abs),
         px * (vy * px - vx * py) / (p_square * p_abs), px / p_abs, py / p_abs;
   } else {
     std::cout << "Error: Jacobian could not be computed" << std::endl;
-    return Hj;
   }
+  return Hj;
 }
